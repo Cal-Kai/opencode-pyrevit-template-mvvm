@@ -1,0 +1,43 @@
+title:
+  en_us: Revit Addin MVVM Template
+  en_gb: Revit Addin MVVM Template
+  fr_fr: Modèle de module complémentaire Revit MVVM
+  de_de: Revit Addin MVVM-Vorlage
+  es_es: Plantilla de complemento Revit MVVM
+  nl_nl: Revit Addin MVVM-sjabloon
+  pt_br: Modelo de Addin Revit MVVM
+  it_it: Modello Addin Revit MVVM
+  chinese_s: Revit 插件 MVVM 模板
+  chinese_t: Revit 外掛 MVVM 範本
+  ja: Revit アドイン MVVM テンプレート
+  ko: Revit 애드인 MVVM 템플릿
+  pl: Szablon dodatku Revit MVVM
+  ru: Шаблон надстройки Revit MVVM
+  hu: Revit bővítmény MVVM sablon
+  cs: Šablona doplňku Revit MVVM
+  bg: Шаблон на добавка Revit MVVM
+  ar: قالب الوظيفة الإضافية Revit MVVM
+  fa: قالب افزونه Revit MVVM
+  uk: Шаблон надбудови Revit MVVM
+
+tooltip:
+  en_us: Template for Revit Addin in MVVM pattern
+  en_gb: Template for Revit Addin in MVVM pattern
+  fr_fr: Modèle pour un module complémentaire Revit suivant le modèle MVVM
+  de_de: Vorlage für Revit-Addin im MVVM-Muster
+  es_es: Plantilla para complemento Revit en patrón MVVM
+  nl_nl: Sjabloon voor Revit Addin in MVVM-patroon
+  pt_br: Modelo para Addin Revit no padrão MVVM
+  it_it: Modello per Addin Revit con pattern MVVM
+  chinese_s: 适用于 MVVM 模式的 Revit 插件模板
+  chinese_t: 適用於 MVVM 模式的 Revit 外掛範本
+  ja: MVVM パターンの Revit アドイン用テンプレート
+  ko: MVVM 패턴의 Revit 애드인 템플릿
+  pl: Szablon dodatku Revit w wzorcu MVVM
+  ru: Шаблон надстройки Revit в архитектуре MVVM
+  hu: Revit bővítmény sablon MVVM mintához
+  cs: Šablona doplňku Revit ve vzoru MVVM
+  bg: Шаблон за добавка на Revit в MVVM шаблон
+  ar: قالب للوظيفة الإضافية Revit بنمط MVVM
+  fa: قالب افزونه Revit در الگوی MVVM
+  uk: Шаблон надбудови Revit у шаблоні MVVM

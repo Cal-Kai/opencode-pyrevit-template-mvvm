@@ -1,0 +1,271 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}" Height="650" Width="800"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        MinHeight="450" MinWidth="500"
+        Name="MainWindow"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <!-- ============================================================ -->
+        <!-- Brand-consistent styles (orange #FF6B00, hover #E66000)      -->
+        <!-- Shared across all proven buttons in the repo.                -->
+        <!-- ============================================================ -->
+
+        <!-- Button Style -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF6B00"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E66000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Secondary Button Style (for Cancel / neutral actions) -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#666666"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#555555"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- TextBox Style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                        Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ListBox Style (with virtualization) -->
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer Padding="1"
+                                        Focusable="false"
+                                        CanContentScroll="True">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="0.6*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============================================================ -->
+        <!-- Loading Indicator (shown while data loads, hidden after)        -->
+        <!-- ============================================================ -->
+        <Border x:Name="LoadingIndicator"
+                Grid.Column="0" Grid.ColumnSpan="3"
+                Grid.Row="0" Grid.RowSpan="4"
+                Background="#80FFFFFF"
+                Panel.ZIndex="100"
+                Visibility="Collapsed">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="200" Height="20"
+                             Margin="0,0,0,10"/>
+                <TextBlock x:Name="LoadingIndicator_Text"
+                           Text="Loading..."
+                           HorizontalAlignment="Center"
+                           FontSize="14"
+                           Foreground="#666666"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- Left Panel: Search + Item List                               -->
+        <!-- ============================================================ -->
+        <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                Background="White"
+                BorderBrush="#CCCCCC"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0,0,0,10">
+            <DockPanel Margin="15">
+                <!-- Title -->
+                <TextBlock x:Name="SelectItemTitle"
+                          DockPanel.Dock="Top"
+                          FontSize="16"
+                          FontWeight="Bold"
+                          Margin="0,0,0,15"/>
+
+                <!-- Search + Bulk Actions -->
+                <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                        <!-- Search bar -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock x:Name="SearchTitle"
+                                       Margin="0,0,10,0"
+                                       VerticalAlignment="Center"/>
+                            <TextBox x:Name="SearchBox"
+                                     Width="250"/>
+                        </StackPanel>
+
+                        <!-- Bulk selection buttons -->
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ListTitle"
+                                       Margin="0,0,10,0"
+                                       VerticalAlignment="Center"/>
+                            <Button x:Name="CheckAllButton"/>
+                            <Button x:Name="UncheckAllButton"/>
+                            <Button x:Name="ToggleCheckButton"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Item List (virtualized for performance) -->
+                    <ListBox x:Name="ItemList"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             SelectionMode="Extended"
+                             VirtualizingPanel.VirtualizationMode="Recycling"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.CanContentScroll="True"
+                             Margin="0,10,0,0">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </DockPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- Selected Items Panel                                         -->
+        <!-- ============================================================ -->
+        <Border Grid.Column="0" Grid.Row="2"
+                Background="White"
+                BorderBrush="#CCCCCC"
+                BorderThickness="1"
+                CornerRadius="8"
+                Margin="0,0,0,10">
+            <DockPanel Margin="15">
+                <TextBlock x:Name="SelectedTitle"
+                          DockPanel.Dock="Top"
+                          FontSize="14"
+                          FontWeight="Bold"
+                          Margin="0,0,0,10"/>
+                <Border Background="#F5F5F5"
+                        CornerRadius="4"
+                        MinHeight="150">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Auto"
+                                Margin="10">
+                        <StackPanel x:Name="SelectedPanel"/>
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- Right Panel (placeholder for tool-specific controls)         -->
+        <!-- E.g.: TextBoxes for prefix/suffix, ComboBoxes for filters,   -->
+        <!--       CheckBox+ComboBox panels, TreeViews, etc.              -->
+        <!-- ============================================================ -->
+        <Border Grid.Column="2" Grid.Row="0" Grid.RowSpan="3"
+                Background="White"
+                BorderBrush="#CCCCCC"
+                BorderThickness="1"
+                CornerRadius="8">
+            <StackPanel Margin="15">
+                <!-- TODO: Add tool-specific controls here.
+                     Common patterns:
+                     - TextBox: for text inputs, file paths
+                     - ComboBox: for dropdown selections
+                     - CheckBox: for boolean options
+                -->
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- Action Buttons                                               -->
+        <!-- ============================================================ -->
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,10">
+            <Button x:Name="RunButton"
+                    Width="180"
+                    Height="40"
+                    Margin="0,0,10,0"
+                    FontSize="14"
+                    FontWeight="Bold"/>
+            <Button x:Name="CancelButton"
+                    Width="180"
+                    Height="40"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Style="{StaticResource SecondaryButtonStyle}"/>
+        </StackPanel>
+    </Grid>
+</Window>
